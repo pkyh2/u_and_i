@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,10 +14,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onHeartPressed() {
     // 상태 변경 시 setState() 메서드를 호출하여 화면을 다시 그린다.
-    setState(() {
-      // 위에 선언된 firstDay 값을 변경하여 화면을 다시 그린다.
-      firstDay = firstDay.subtract(Duration(days: 1));
-    });
+    // setState(() {
+    //   // 위에 선언된 firstDay 값을 변경하여 화면을 다시 그린다.
+    //   firstDay = firstDay.subtract(Duration(days: 1));
+    // });
+
+    showCupertinoDialog(
+      // 쿠퍼티노 다얼로그 실행.
+      context: context,
+      builder: (BuildContext context) {
+        // 쿠퍼티노 실행시 초기 날짜 값
+        final initDate = DateFormat('yyyy-MM-dd').parse('2022-01-01');
+
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            color: Colors.white,
+            height: 300,
+            child: CupertinoDatePicker(
+              // 날짜 선택하는 다이얼로그
+              mode: CupertinoDatePickerMode.date,
+              // 선택한 날짜가 오늘이후로 선택되지 않도록 설정
+              minimumYear: 2000,
+              maximumYear: DateTime.now().year, // 현재 년도 이후는 표시가 안됨
+              maximumDate: DateTime.now(),
+              initialDateTime: initDate,
+              onDateTimeChanged: (DateTime date) {
+                setState(
+                  () => {
+                    firstDay = date,
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+      barrierDismissible: true,
+    );
   }
 
   @override
