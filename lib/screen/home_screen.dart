@@ -10,7 +10,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime firstDay = DateTime.now();
+  // DateTime firstDay = DateTime.now();
+  DateTime firstDay = DateTime(2025, 2, 14);
 
   void onHeartPressed() {
     // 상태 변경 시 setState() 메서드를 호출하여 화면을 다시 그린다.
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         // 쿠퍼티노 실행시 초기 날짜 값
-        final initDate = DateFormat('yyyy-MM-dd').parse('2022-01-01');
+        final initDate = DateFormat('yyyy-MM-dd').parse('2025-02-14');
 
         return Align(
           alignment: Alignment.bottomCenter,
@@ -35,9 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
               // 날짜 선택하는 다이얼로그
               mode: CupertinoDatePickerMode.date,
               // 선택한 날짜가 오늘이후로 선택되지 않도록 설정
-              minimumYear: 2000,
-              maximumYear: DateTime.now().year, // 현재 년도 이후는 표시가 안됨
-              maximumDate: DateTime.now(),
+              // minimumYear: 2000,
+              // maximumYear: DateTime.now().year, // 현재 년도 이후는 표시가 안됨
+              // maximumDate: DateTime.now(),
+              maximumYear: 2030,
+              minimumDate: DateTime.now(),
+              minimumYear: DateTime.now().year,
               initialDateTime: initDate,
               onDateTimeChanged: (DateTime date) {
                 setState(
@@ -99,6 +103,10 @@ class _DDayState extends State<DDay> {
     final onHeartPressed = widget.onHeartPressed;
     final todayNow = DateTime.now();
 
+    final diffDays = DateTime(todayNow.year, todayNow.month, todayNow.day)
+        .difference(widget.firstDay)
+        .inDays;
+
     return Column(children: [
       const SizedBox(height: 16.0),
       Text(
@@ -107,7 +115,8 @@ class _DDayState extends State<DDay> {
       ),
       const SizedBox(height: 16.0),
       Text(
-        '우리 처음 만난 날',
+        // '우리 처음 만난 날',
+        '우리 헤어지는 날',
         style: textTheme.bodyMedium,
       ),
       Text(
@@ -124,8 +133,13 @@ class _DDayState extends State<DDay> {
       ),
       const SizedBox(height: 16.0),
       Text(
-          'D+${DateTime(todayNow.year, todayNow.month, todayNow.day).difference(widget.firstDay).inDays + 1}',
+          // 'D+${DateTime(todayNow.year, todayNow.month, todayNow.day).difference(widget.firstDay).inDays + 1}',
+          diffDays == 0 ? 'D-Day' : 'D${diffDays}',
           style: textTheme.displayMedium),
+      Text(
+        //timer
+        '${DateFormat('yyyy.MM.dd').format(todayNow)}',
+      )
     ]);
   }
 }
